@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+
+    function verificar() {
+        var cpf = $("#cpf").val();
+        var qtd1 = cpf.length - 2;
+        var qtd2 = cpf.length - 1;
+        var x = 0;
+        var y = 0;
+
+        try {
+            var c;
+            for (var i = 0; i < qtd1; i++) {
+                c = cpf.charAt(i);
+                c *= 10 - i;
+                x = x + c;
+            }
+            c = 0;
+            for (var i = 0; i < qtd2; i++) {
+                c = cpf.charAt(i);
+                c *= 11 - i;
+                y = y + c;
+            }
+
+            var dig1 = x % 11
+            var dig2 = y % 11
+
+            if (dig1 < 2) {
+                dig1 = 0;
+            } else {
+                dig1 = 11 - dig1;
+            }
+
+            if (dig2 < 2) {
+                dig2 = 0;
+            } else {
+                dig2 = 11 - dig2;
+            }
+            if (dig1 == cpf.charAt(9) && dig2 == cpf.charAt(10)) {
+                $("#aviso").text("CPF Válido!").css("color", "blue");
+            } else {
+                $("#aviso").text("CPF Inválido!").css("color", "red");
+            }
+        } catch (ex) {
+            alert(ex);
+        }
+
+    }
+
+</script>
+
+<h2>Validação de CPF</h2>
+
+<fieldset style="width: 30%; text-align:center;">
+    <legend>Dados:</legend>
+
+    <p>
+        @Html.TextBox("cpf", htmlAttributes: new { @class = ""})
+        <input name="btnVerificar" value="Verificar" type="button" onclick="verificar();" maxlength="11" />
+    </p>
+    <p><span id="aviso"></span></p>
+</fieldset>
